@@ -33,7 +33,7 @@ function RegisterUSerScreen({ navigation }) {
     <Screen style={styles.container}>
       <View style={styles.formContainer}>
         <View style={styles.formHeader}>
-          <Text style={styles.loginTitle}>Doctor Registration</Text>
+          <Text style={styles.loginTitle}>User Registration</Text>
         </View>
 
         <Form

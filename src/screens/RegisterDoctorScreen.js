@@ -98,7 +98,7 @@ function RegisterDoctorScreen({ navigation }) {
               width={defaultStyles.windowWidth}
             />
             <FormField
-              autoCapitalize="false"
+              autoCapitalize="none"
               autoCorrect={false}
               icon="key"
               name="SecretWord"
