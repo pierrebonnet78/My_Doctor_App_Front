@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import * as Yup from "yup";
 
@@ -6,6 +6,12 @@ import Text from "../components/Text";
 import defaultStyles from "../config/styles";
 import Screen from "../components/Screen";
 import select from "../components/forms/formsSelectList";
+import useAuth from "../auth/useAuth";
+import usersApi from "../api/users";
+import { authentification } from "../firebase/config";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { db } from "../firebase/config";
+import { collection, addDoc } from "@firebase/firestore";
 
 import {
   ErrorMessage,
@@ -16,19 +22,60 @@ import {
 } from "../components/forms";
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().required().email().label("Email"),
-  password: Yup.string().required().min(6).label("Password"),
   firstname: Yup.string().required().label("Fist Name"),
   lastname: Yup.string().required().label("Last Name"),
   weight: Yup.number().required().label("Weight"),
   height: Yup.number().required().label("Height"),
+  email: Yup.string().required().email().label("Email"),
+  password: Yup.string().required().min(5).label("Password"),
+  sexe: Yup.object({
+    label: Yup.string().required(),
+    value: Yup.number().required(),
+  }).label("Sexe"),
+  blood: Yup.object({
+    label: Yup.string(),
+    value: Yup.number(),
+  }).label("Blood group"),
 });
 
-function RegisterUSerScreen({ navigation }) {
-  const handleSubmit = () => {
-    console.log("Login");
+function RegisterUserScreen({ navigation }) {
+  const [error, setError] = useState();
+  const auth = useAuth();
+  const handleSubmit = (userInfo) => {
+    createUserWithEmailAndPassword(
+      authentification,
+      userInfo.email,
+      userInfo.password
+    )
+      .then((result) => {
+        try {
+          const docRef = addDoc(collection(db, "users"), {
+            first_name: userInfo.firstname,
+            last_name: userInfo.lastname,
+            uid: result.user.uid,
+            email: userInfo.email,
+            weight: userInfo.weight,
+            height: userInfo.height,
+            blood_group: userInfo.blood.label,
+            sexe: userInfo.sexe.label,
+          });
+          console.log("Document written with ID: ", docRef.id);
+        } catch (error) {
+          setError(error.message);
+        }
+        auth.logIn(result.user);
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
   };
 
+  /* a finir de dev avec une Promise
+  const handleSubmit = async (userInfo) => {
+    const user = await usersApi(userInfo, auth);
+    console.log(user);
+    auth.logIn(user);
+  }; */
   return (
     <Screen style={styles.container}>
       <View style={styles.formContainer}>
@@ -42,16 +89,18 @@ function RegisterUSerScreen({ navigation }) {
             password: "",
             firstname: "",
             lastname: "",
-            seniority: "",
-            secretWord: "",
+            height: "",
+            weight: "",
+            blood: "",
+            sexe: "",
           }}
-          onSubmit={handleSubmit}
           validationSchema={validationSchema}
+          onSubmit={handleSubmit}
         >
-          <ErrorMessage error="Error" visible={false} />
+          <ErrorMessage error={error} visible={setError} />
           <View style={styles.formField}>
             <FormField
-              autoCapitalize="true"
+              autoCapitalize="words"
               autoCorrect={false}
               icon="account"
               name="firstname"
@@ -59,8 +108,9 @@ function RegisterUSerScreen({ navigation }) {
               textContentType="name"
               width={defaultStyles.windowWidth}
             />
+
             <FormField
-              autoCapitalize="true"
+              autoCapitalize="words"
               autoCorrect={false}
               icon="account"
               name="lastname"
@@ -111,7 +161,8 @@ function RegisterUSerScreen({ navigation }) {
             />
             <FormPicker items={select.sexe} name="sexe" placeholder="Sexe" />
           </View>
-          <SubmitButton title="Login" />
+
+          <SubmitButton title="Register" />
           <View style={styles.login}>
             <Text>
               Already have an account ?{" "}
@@ -165,10 +216,15 @@ const styles = StyleSheet.create({
   },
   formField: {
     padding: 20,
+    flex: 1,
   },
   link: {
     color: defaultStyles.colors.primary,
     textDecorationLine: "underline",
   },
+  errorMessage: {
+    alignItems: "stretch",
+    flexGrow: 0,
+  },
 });
-export default RegisterUSerScreen;
+export default RegisterUserScreen;

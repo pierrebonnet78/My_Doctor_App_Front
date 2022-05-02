@@ -20,6 +20,7 @@ function Picker({
   PickerItemComponent = PickerItem,
   placeholder,
   selectedItem,
+  icon,
 }) {
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -27,11 +28,7 @@ function Picker({
     <>
       <TouchableWithoutFeedback onPress={() => setModalVisible(true)}>
         <View style={styles.container}>
-          <MaterialCommunityIcons
-            name="gender-male-female"
-            size={20}
-            style={styles.icon}
-          />
+          <MaterialCommunityIcons name={icon} size={20} style={styles.icon} />
 
           {selectedItem ? (
             <Text style={styles.text}>{selectedItem.label}</Text>

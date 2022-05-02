@@ -12,7 +12,8 @@ import {
   SubmitButton,
 } from "../components/forms";
 import useAuth from "../auth/useAuth";
-import authApi from "../api/auth";
+import { authentification } from "../firebase/config";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -20,6 +21,7 @@ const validationSchema = Yup.object().shape({
 });
 
 function LoginScreen({ navigation }) {
+  /*
   const auth = useAuth();
   const [loginFailed, setLoginFailed] = useState(false);
 
@@ -29,6 +31,19 @@ function LoginScreen({ navigation }) {
     if (!result.ok) return setLoginFailed(true);
     setLoginFailed(false);
     auth.logIn(result.data);
+  };
+  */
+  const [loginFailed, setLoginFailed] = useState(false);
+  const auth = useAuth();
+
+  const handleSubmit = ({ email, password }) => {
+    signInWithEmailAndPassword(authentification, email, password)
+      .then((result) => {
+        auth.logIn(result.user);
+      })
+      .catch((error) => {
+        setLoginFailed(true);
+      });
   };
 
   return (

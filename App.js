@@ -33,7 +33,6 @@ function App() {
 
   const restoreUser = async () => {
     const user = await getUser();
-    console.log("user is ", user);
     if (user) setUser(user);
   };
 

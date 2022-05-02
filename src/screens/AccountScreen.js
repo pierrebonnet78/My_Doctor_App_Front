@@ -8,8 +8,13 @@ function AccountScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text> {user.name} </Text>
-      <Text> {user.email} </Text>
+      {/*}
+      <Text> name : {user.name} </Text>
+      <Text> email : {user.email} </Text>
+      <Text> firstname : {user.firstname}</Text>
+      <Text> sexe : {user.sexe.label} </Text>
+      */}
+      <Text> You are logged in</Text>
       <Button
         title="Log out"
         onPress={() => {

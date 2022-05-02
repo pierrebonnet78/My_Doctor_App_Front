@@ -14,10 +14,16 @@ function FormPicker({
 }) {
   const { errors, setFieldValue, touched, values } = useFormikContext();
 
+  if (name.valueOf() === "blood") {
+    var icon_name = "hospital";
+  } else {
+    var icon_name = "gender-male-female";
+  }
+
   return (
     <>
       <Picker
-        icon={items.icon}
+        icon={icon_name}
         items={items}
         numberOfColumns={numberOfColumns}
         onSelectItem={(item) => setFieldValue(name, item)}
