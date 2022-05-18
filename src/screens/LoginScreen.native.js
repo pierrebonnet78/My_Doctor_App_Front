@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text, ImageBackground } from "react-native";
+import { View, StyleSheet, ImageBackground } from "react-native";
 import * as Yup from "yup";
 
 import defaultStyles from "../config/styles";
@@ -9,9 +9,11 @@ import {
   FormField,
   SubmitButton,
 } from "../components/forms";
+import Text from "../components/Text";
 import useAuth from "../auth/useAuth";
 import { authentification } from "../firebase/config";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import colors from "../config/colors";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -73,19 +75,24 @@ function LoginScreen({ navigation }) {
         <View style={styles.registration}>
           <Text>
             No account ? For users :{" "}
-            <Text onPress={() => navigation.navigate("RegisterUser")}>
-              Register
-            </Text>
-          </Text>
-          <Text>
-            No account ? For doctors :{" "}
             <Text
-              style={styles.registerDoctor}
-              onPress={() => navigation.navigate("RegisterDoctor")}
+              style={styles.link}
+              onPress={() => navigation.navigate("RegisterUser")}
             >
               Register
             </Text>
           </Text>
+          <View style={styles.registerDoctor}>
+            <Text>
+              No account ? For doctors :{" "}
+              <Text
+                style={styles.link}
+                onPress={() => navigation.navigate("RegisterDoctor")}
+              >
+                Register
+              </Text>
+            </Text>
+          </View>
         </View>
       </Form>
     </ImageBackground>
@@ -102,6 +109,7 @@ const styles = StyleSheet.create({
   registration: {
     display: "flex",
     flexDirection: "column",
+    paddingTop: 15,
   },
   formHeader: {
     padding: 30,
@@ -116,6 +124,13 @@ const styles = StyleSheet.create({
   },
   formField: {
     padding: 20,
+  },
+  registerDoctor: {
+    paddingTop: 20,
+  },
+  link: {
+    textDecorationLine: "underline",
+    color: colors.primary,
   },
 });
 

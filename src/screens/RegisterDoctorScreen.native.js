@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, StyleSheet, ImageBackground } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
+import { collection, getDocs, addDoc } from "@firebase/firestore";
 import * as Yup from "yup";
 
 import Text from "../components/Text";
@@ -10,6 +10,8 @@ import select from "../components/forms/formsSelectList";
 import useAuth from "../auth/useAuth";
 import { authentification } from "../firebase/config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { db, defaultProfileImageUrl } from "../firebase/config";
+import { setDoc, doc } from "@firebase/firestore";
 
 import {
   ErrorMessage,
@@ -18,6 +20,7 @@ import {
   SubmitButton,
   FormPicker,
 } from "../components/forms";
+import colors from "../config/colors";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -26,10 +29,6 @@ const validationSchema = Yup.object().shape({
   lastname: Yup.string().required().label("Last Name"),
   seniority: Yup.number().required().label("Year of Seniority").min(1),
   secretWord: Yup.string().required().label("Secret word frothe cabinet"),
-  // sexe: Yup.object({
-  //   label: Yup.string().required(),
-  //   value: Yup.number().required(),
-  // }).label("Sexe"),
   sexe: Yup.object()
     .shape({
       label: Yup.string().required("Test"),
@@ -46,26 +45,19 @@ function RegisterScreenDoctor({ navigation }) {
       authentification,
       userInfo.email,
       userInfo.password
-    )
-      .then((result) => {
-        try {
-          addDoc(collection(db, "doctors"), {
-            first_name: userInfo.firstname,
-            last_name: userInfo.lastname,
-            uid: result.user.uid,
-            email: userInfo.email,
-            sexe: userInfo.sexe.label,
-            secret_word: userInfo.secretWord,
-            seniority: userInfo.seniority,
-          });
-        } catch (error) {
-          setError(error.message);
-        }
-        auth.logIn(result.user);
-      })
-      .catch((error) => {
-        setError(error.message);
+    ).then(async (result) => {
+      setDoc(doc(db, "doctors", result.user.uid), {
+        first_name: userInfo.firstname,
+        last_name: userInfo.lastname,
+        uid: result.user.uid,
+        email: userInfo.email,
+        sexe: userInfo.sexe.label,
+        secret_word: userInfo.secretWord,
+        seniority: userInfo.seniority,
+        imgUrl: defaultProfileImageUrl,
       });
+      auth.logIn(result.user);
+    });
   };
 
   return (
@@ -209,6 +201,9 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     paddingTop: 20,
+  },
+  link: {
+    textDecorationLine: "underline",
   },
 });
 

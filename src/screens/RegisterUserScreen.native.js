@@ -9,6 +9,8 @@ import select from "../components/forms/formsSelectList";
 import useAuth from "../auth/useAuth";
 import { authentification } from "../firebase/config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { db, defaultProfileImageUrl } from "../firebase/config";
+import { setDoc, doc } from "@firebase/firestore";
 
 import {
   ErrorMessage,
@@ -43,28 +45,20 @@ function RegisterUserScreen({ navigation }) {
       authentification,
       userInfo.email,
       userInfo.password
-    )
-      .then((result) => {
-        try {
-          const docRef = addDoc(collection(db, "users"), {
-            first_name: userInfo.firstname,
-            last_name: userInfo.lastname,
-            uid: result.user.uid,
-            email: userInfo.email,
-            weight: userInfo.weight,
-            height: userInfo.height,
-            blood_group: userInfo.blood.label,
-            sexe: userInfo.sexe.label,
-          });
-          console.log("Document written with ID: ", docRef.id);
-        } catch (error) {
-          setError(error.message);
-        }
-        auth.logIn(result.user);
-      })
-      .catch((error) => {
-        setError(error.message);
+    ).then(async (result) => {
+      setDoc(doc(db, "users", result.user.uid), {
+        first_name: userInfo.firstname,
+        last_name: userInfo.lastname,
+        uid: result.user.uid,
+        email: userInfo.email,
+        weight: userInfo.weight,
+        height: userInfo.height,
+        blood_group: userInfo.blood.label,
+        sexe: userInfo.sexe.label,
+        imgUrl: defaultProfileImageUrl,
       });
+      auth.logIn(result.user);
+    });
   };
 
   return (

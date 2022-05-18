@@ -9,8 +9,8 @@ import select from "../components/forms/formsSelectList";
 import useAuth from "../auth/useAuth";
 import { authentification } from "../firebase/config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { db } from "../firebase/config";
-import { collection, getDocs, addDoc } from "@firebase/firestore";
+import { db, defaultProfileImageUrl } from "../firebase/config";
+import { setDoc, doc } from "@firebase/firestore";
 
 import {
   ErrorMessage,
@@ -43,26 +43,19 @@ function RegisterDoctorScreen({ navigation }) {
       authentification,
       userInfo.email,
       userInfo.password
-    )
-      .then((result) => {
-        try {
-          const docRef = addDoc(collection(db, "doctors"), {
-            first_name: userInfo.firstname,
-            last_name: userInfo.lastname,
-            uid: result.user.uid,
-            email: userInfo.email,
-            sexe: userInfo.sexe.label,
-            secret_word: userInfo.secretWord,
-            seniority: userInfo.seniority,
-          });
-        } catch (error) {
-          setError(error.message);
-        }
-        auth.logIn(result.user);
-      })
-      .catch((error) => {
-        setError(error.message);
+    ).then(async (result) => {
+      setDoc(doc(db, "doctors", result.user.uid), {
+        first_name: userInfo.firstname,
+        last_name: userInfo.lastname,
+        uid: result.user.uid,
+        email: userInfo.email,
+        sexe: userInfo.sexe.label,
+        secret_word: userInfo.secretWord,
+        seniority: userInfo.seniority,
+        imgUrl: defaultProfileImageUrl,
       });
+      auth.logIn(result.user);
+    });
   };
 
   return (
@@ -193,7 +186,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   loginTitle: {
-    fontSize: 25,
+    fontSize: 2,
     fontWeight: "bold",
   },
   formField: {

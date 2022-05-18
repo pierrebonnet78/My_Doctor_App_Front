@@ -2,6 +2,8 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "@firebase/firestore";
+import { getStorage } from "firebase/storage";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -22,3 +24,6 @@ const app = initializeApp(firebaseConfig);
 
 export const authentification = getAuth(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app);
+export const defaultProfileImageUrl =
+  "https://firebasestorage.googleapis.com/v0/b/my-doctor-app-79280.appspot.com/o/photos%2Fdefault%2FAccount_Porfile.png?alt=media&token=8f878714-7f09-46ba-bb94-a6c79361f655";
