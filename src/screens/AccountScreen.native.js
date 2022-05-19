@@ -26,11 +26,17 @@ function AccountScreen({ navigation }) {
 
   const handleUpdate = async () => {
     let imageUrl = await uploadImage(userData.uid);
-
     console.log(userData);
-    updateDoc(doc(db, "users", userData.uid), {
-      imgUrl: imageUrl,
-    }).then(() => {});
+
+    if (userData.doctorSpeciality) {
+      updateDoc(doc(db, "doctors", userData.uid), {
+        imgUrl: imageUrl,
+      });
+    } else {
+      updateDoc(doc(db, "users", userData.uid), {
+        imgUrl: imageUrl,
+      });
+    }
   };
 
   const uploadImage = async () => {
@@ -121,24 +127,52 @@ function AccountScreen({ navigation }) {
         </View>
       </View>
       <View style={styles.accountSettings}>
-        <ListItem
-          title={"Terms and Conditions"}
-          IconComponent={
-            <Icon name={"clipboard-file"} backgroundColor={"blue"} />
-          }
-        />
-        <ListItem
-          title={"LogOut"}
-          IconComponent={<Icon name={"logout"} backgroundColor={"green"} />}
-          onPress={logOut}
-        />
-        <ListItem
-          title={"Delete Account"}
-          IconComponent={
-            <Icon name={"account-remove"} backgroundColor={"orange"} />
-          }
-          onPress={createRemoveAccountAlert}
-        />
+        <View>
+          <ListItem
+            title={"Notifications"}
+            IconComponent={
+              <Icon name={"alarm-light-outline"} backgroundColor={"#2573D9"} />
+            }
+          />
+          <ListItem
+            title={"Privacy"}
+            IconComponent={
+              <Icon name={"information-outline"} backgroundColor={"#3D90D9"} />
+            }
+          />
+          <ListItem
+            title={"Security"}
+            IconComponent={
+              <Icon name={"security"} backgroundColor={"#5DBF17"} />
+            }
+          />
+          <ListItem
+            title={"Terms of use"}
+            IconComponent={
+              <Icon
+                name={"clipboard-file-outline"}
+                backgroundColor={"#F29F05"}
+              />
+            }
+          />
+        </View>
+        <View>
+          <ListItem
+            title={"LogOut"}
+            IconComponent={<Icon name={"logout"} backgroundColor={"purple"} />}
+            onPress={logOut}
+          />
+          <ListItem
+            title={"Delete Account"}
+            IconComponent={
+              <Icon
+                name={"account-remove-outline"}
+                backgroundColor={"#F21905"}
+              />
+            }
+            onPress={createRemoveAccountAlert}
+          />
+        </View>
       </View>
     </View>
   );
@@ -159,7 +193,6 @@ const styles = StyleSheet.create({
   },
   upper: {
     padding: 20,
-    flex: 1,
   },
   name: {
     alignItems: "center",
@@ -168,6 +201,8 @@ const styles = StyleSheet.create({
   accountSettings: {
     flex: 1,
     width: "100%",
+    paddingTop: 20,
+    justifyContent: "space-around",
   },
 });
 export default AccountScreen;

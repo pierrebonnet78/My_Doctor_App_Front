@@ -26,7 +26,7 @@ const validationSchema = Yup.object().shape({
   firstname: Yup.string().required().label("Fist Name"),
   lastname: Yup.string().required().label("Last Name"),
   seniority: Yup.number().required().label("Year of Seniority").min(1),
-  secretWord: Yup.string().required().label("Secret word frothe cabinet"),
+  doctorSpeciality: Yup.string().required().label("Doctor speciality"),
   sexe: Yup.object()
     .shape({
       label: Yup.string().required("Test"),
@@ -50,7 +50,7 @@ function RegisterDoctorScreen({ navigation }) {
         uid: result.user.uid,
         email: userInfo.email,
         sexe: userInfo.sexe.label,
-        secret_word: userInfo.secretWord,
+        doctorSpeciality: userInfo.doctorSpeciality,
         seniority: userInfo.seniority,
         imgUrl: defaultProfileImageUrl,
       });
@@ -72,7 +72,7 @@ function RegisterDoctorScreen({ navigation }) {
             firstname: "",
             lastname: "",
             seniority: "",
-            secretWord: "",
+            doctorSpeciality: "",
             sexe: "",
           }}
           onSubmit={handleSubmit}
@@ -81,7 +81,7 @@ function RegisterDoctorScreen({ navigation }) {
           <ErrorMessage error={error} visible={setError} />
           <View style={styles.formField}>
             <FormField
-              autoCapitalize="true"
+              autoCapitalize="words"
               autoCorrect={false}
               icon="account"
               name="firstname"
@@ -90,7 +90,7 @@ function RegisterDoctorScreen({ navigation }) {
               width={defaultStyles.windowWidth}
             />
             <FormField
-              autoCapitalize="true"
+              autoCapitalize="words"
               autoCorrect={false}
               icon="account"
               name="lastname"
@@ -119,7 +119,7 @@ function RegisterDoctorScreen({ navigation }) {
               width={defaultStyles.windowWidth}
             />
             <FormField
-              autoCapitalize="true"
+              autoCapitalize="words"
               autoCorrect={false}
               icon="school"
               name="seniority"
@@ -130,9 +130,9 @@ function RegisterDoctorScreen({ navigation }) {
               autoCapitalize="none"
               autoCorrect={false}
               icon="key"
-              name="secretWord"
-              placeholder="Secret word"
-              textContentType="Secret word from the cabinet"
+              name="doctorSpeciality"
+              placeholder="Doctor speciality"
+              textContentType="Doctor speciality"
               width={defaultStyles.windowWidth}
             />
             <FormPicker items={select.sexe} name="sexe" placeholder="Sexe" />

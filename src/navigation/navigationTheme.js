@@ -6,7 +6,7 @@ export default {
   colors: {
     ...DefaultTheme.colors,
     primary: colors.light,
-    background: colors.light,
+    background: colors.low,
     card: colors.primary,
   },
 };

@@ -28,7 +28,7 @@ const validationSchema = Yup.object().shape({
   firstname: Yup.string().required().label("Fist Name"),
   lastname: Yup.string().required().label("Last Name"),
   seniority: Yup.number().required().label("Year of Seniority").min(1),
-  secretWord: Yup.string().required().label("Secret word frothe cabinet"),
+  doctorSpeciality: Yup.string().required().label("Doctor speciality"),
   sexe: Yup.object()
     .shape({
       label: Yup.string().required("Test"),
@@ -52,7 +52,7 @@ function RegisterScreenDoctor({ navigation }) {
         uid: result.user.uid,
         email: userInfo.email,
         sexe: userInfo.sexe.label,
-        secret_word: userInfo.secretWord,
+        doctorSpeciality: userInfo.doctorSpeciality,
         seniority: userInfo.seniority,
         imgUrl: defaultProfileImageUrl,
       });
@@ -86,7 +86,7 @@ function RegisterScreenDoctor({ navigation }) {
               firstname: "",
               lastname: "",
               seniority: "",
-              secretWord: "",
+              doctorSpeciality: "",
               sexe: "",
             }}
             onSubmit={handleSubmit}
@@ -96,7 +96,7 @@ function RegisterScreenDoctor({ navigation }) {
 
             <View style={styles.formField}>
               <FormField
-                autoCapitalize="true"
+                autoCapitalize="words"
                 autoCorrect={false}
                 icon="account"
                 name="firstname"
@@ -105,7 +105,7 @@ function RegisterScreenDoctor({ navigation }) {
                 width={defaultStyles.windowWidth}
               />
               <FormField
-                autoCapitalize="true"
+                autoCapitalize="words"
                 autoCorrect={false}
                 icon="account"
                 name="lastname"
@@ -134,7 +134,7 @@ function RegisterScreenDoctor({ navigation }) {
                 width={defaultStyles.windowWidth}
               />
               <FormField
-                autoCapitalize="true"
+                autoCapitalize="words"
                 autoCorrect={false}
                 icon="school"
                 name="seniority"
@@ -146,8 +146,8 @@ function RegisterScreenDoctor({ navigation }) {
                 autoCapitalize="none"
                 autoCorrect={false}
                 icon="key"
-                name="secretWord"
-                placeholder="Secret word from the cabinet"
+                name="doctorSpeciality"
+                placeholder="Doctor speciality"
                 width={defaultStyles.windowWidth}
               />
               <KeyboardAwareScrollView
