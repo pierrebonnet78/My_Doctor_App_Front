@@ -15,7 +15,6 @@ apiClient.addAsyncRequestTransform(async (request) => {
     console.log("Auth Token not retrieve");
     return;
   }
-  console.log(authToken);
   request.headers["x-auth-token"] = authToken;
 });
 

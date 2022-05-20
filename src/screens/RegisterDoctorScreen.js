@@ -127,7 +127,7 @@ function RegisterDoctorScreen({ navigation }) {
               width={defaultStyles.windowWidth}
             />
             <FormField
-              autoCapitalize="none"
+              autoCapitalize="words"
               autoCorrect={false}
               icon="key"
               name="doctorSpeciality"

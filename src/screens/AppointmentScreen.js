@@ -57,8 +57,6 @@ export default class Home1 extends React.Component {
     const { query } = this.state;
     const DataList = this.findData(query);
 
-    console.log("DataList", DataList);
-
     const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
 
     return (

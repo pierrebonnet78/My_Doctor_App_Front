@@ -1,27 +1,40 @@
 import React, { useEffect, useState } from "react";
+import { View, StyleSheet, Text, Button, SafeAreaView } from "react-native";
 import {
-  View,
-  StyleSheet,
-  Text,
-  Button,
-  SafeAreaView,
-  TouchableOpacity,
-  ImageBackground,
-} from "react-native";
-import { collection, query, where, getDocs } from "firebase/firestore";
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  setDoc,
+  doc,
+} from "firebase/firestore";
 import { db } from "../firebase/config";
 import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
 import colors from "../config/colors";
-import ActivityIndicator from "../components/ActivityIndicator";
+import { Image } from "react-native-elements";
+import useAuth from "../auth/useAuth";
 
-function HomePageScreen() {
+function HomePageScreen({ navigation }) {
   const [doctors, setDoctors] = useState([]);
   const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [selectedValue, setSelectedValue] = useState(false);
+  const { userData } = useAuth();
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  const createChat = async () => {
+    const id_doc = selectedValue.uid + userData?.uid;
+    console.log(id_doc);
+    const ref = setDoc(doc(db, "chats", id_doc), {
+      user: userData?.uid,
+      doctor: selectedValue.uid,
+      doctorName: selectedValue.first_name + " " + selectedValue.last_name,
+      userName: userData?.first_name + " " + userData?.last_name,
+    }).then(() => navigation.navigate("ChatPage", { screen: "ChatList" }));
+  };
 
   const fetchData = async () => {
     const q = query(collection(db, "doctors"));
@@ -29,7 +42,6 @@ function HomePageScreen() {
     const querySnapshot = await getDocs(q);
     var i = 0;
     querySnapshot.forEach((doc) => {
-      //console.log(doc.id, " => ", doc.data());
       tempDoctor.push(doc.data());
       tempDoctor[i].title =
         doc.data().first_name +
@@ -40,17 +52,8 @@ function HomePageScreen() {
       tempDoctor[i].id = i;
       i++;
     });
-    console.log(tempDoctor);
     setDoctors(tempDoctor);
     //setDoctors(people);
-  };
-
-  const findDoctor = (query) => {
-    if (query) {
-      const regex = new RegExp(`${query.trim()}`, "i");
-      return doctors.filter((data) => data.first_name.search(regex));
-    }
-    return [];
   };
 
   return (
@@ -84,7 +87,7 @@ function HomePageScreen() {
         {selectedValue ? (
           <View style={styles.doctor}>
             <View style={styles.description}>
-              <ImageBackground
+              <Image
                 source={{
                   uri: selectedValue
                     ? selectedValue.imgUrl
@@ -105,10 +108,15 @@ function HomePageScreen() {
               </View>
             </View>
             <View style={styles.contact}>
-              <Button title="Send a message" />
+              <Button
+                title="Send a message"
+                onPress={() => {
+                  //navigation.navigate("Chat", selectedValue);
+                  createChat();
+                }}
+              />
               <Button title="See agenda" />
             </View>
-            <ActivityIndicator visible={true} />
           </View>
         ) : null}
       </View>
@@ -146,8 +154,6 @@ const styles = StyleSheet.create({
   imageBackground: {
     height: 100,
     width: 100,
-  },
-  profilePicture: {
     borderRadius: 50,
   },
 });

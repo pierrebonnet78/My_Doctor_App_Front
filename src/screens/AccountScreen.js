@@ -20,7 +20,6 @@ function AccountScreen({ navigation }) {
 
   const handleUpdate = async () => {
     let imageUrl = await uploadImage(user.user_id);
-    console.log(imageUrl);
 
     if (imageUrl == null && userData.imgUrl) {
       imageUrl = userData.imgUrl;
@@ -38,8 +37,7 @@ function AccountScreen({ navigation }) {
     }
 
     const uploadUri = image;
-    console.log("upload uri is ", uploadUri);
-    console.log("user is");
+
     let filename = user.user_id + "/profilePicture";
 
     const storage = getStorage();

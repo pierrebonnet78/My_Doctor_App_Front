@@ -3,14 +3,12 @@ import {
   View,
   StyleSheet,
   Text,
-  ImageBackground,
-  Image,
   TouchableOpacity,
   Alert,
   Button,
 } from "react-native";
-import { Avatar } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
+import { Image } from "react-native-elements";
 
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import useAuth from "../auth/useAuth";
@@ -26,7 +24,6 @@ function AccountScreen({ navigation }) {
 
   const handleUpdate = async () => {
     let imageUrl = await uploadImage(userData.uid);
-    console.log(userData);
 
     if (userData.doctorSpeciality) {
       updateDoc(doc(db, "doctors", userData.uid), {
@@ -46,7 +43,7 @@ function AccountScreen({ navigation }) {
     }
 
     const uploadUri = image;
-    console.log("upload uri is ", uploadUri);
+
     let filename = userData.uid + "/profilePicture";
 
     const storage = getStorage();
@@ -100,7 +97,7 @@ function AccountScreen({ navigation }) {
     <View style={styles.container}>
       <View style={styles.upper}>
         <TouchableOpacity onPress={choosePhotoFromLibrary} disabled={loading}>
-          <ImageBackground
+          <Image
             source={{
               uri: image
                 ? image
@@ -109,7 +106,6 @@ function AccountScreen({ navigation }) {
                 : "https://www.pngmart.com/files/21/Account-Avatar-Profile-PNG-Photo.png",
             }}
             style={styles.imageBackground}
-            imageStyle={styles.profilePicture}
           />
         </TouchableOpacity>
         {image ? (
@@ -187,6 +183,7 @@ const styles = StyleSheet.create({
   imageBackground: {
     height: 100,
     width: 100,
+    borderRadius: 50,
   },
   profilePicture: {
     borderRadius: 50,

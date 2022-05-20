@@ -13,7 +13,6 @@ const useAuth = () => {
   const { userData, setUserData } = useContext(UserDataContext);
 
   const logIn = async (user) => {
-    console.log("!", user);
     setUser(user);
     const userData = await getUserData(user.uid);
     setUserData(userData);
@@ -30,7 +29,6 @@ const useAuth = () => {
     await deleteDoc(doc(db, "users", user.uid));
 
     const storage = getStorage();
-    console.log(user);
     const storageref = ref(storage, `photos/${user.uid}/profilePicture`);
     deleteObject(storageref)
       .then(() => {
