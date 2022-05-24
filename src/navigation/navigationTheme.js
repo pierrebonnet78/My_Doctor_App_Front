@@ -8,5 +8,6 @@ export default {
     primary: colors.light,
     background: colors.low,
     card: colors.primary,
+    text: colors.white,
   },
 };

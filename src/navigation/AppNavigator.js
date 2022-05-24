@@ -7,16 +7,17 @@ import AppointmentScreen from "../screens/AppointmentScreen";
 import AccountNavigator from "./AccountNavigator";
 import HomeNavigator from "./HomeNavigator";
 import ChatNavigator from "./ChatNavigator";
+import colors from "../config/colors";
 const Tab = createBottomTabNavigator();
 
 function AppNavigator(props) {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="HomePage"
+        name="Doctors"
         component={HomeNavigator}
         options={{
-          tabBarIcon: () => <MaterialCommunityIcons name="home" size={20} />,
+          tabBarIcon: () => <MaterialCommunityIcons name="magnify" size={25} />,
         }}
       />
       <Tab.Screen
@@ -24,16 +25,16 @@ function AppNavigator(props) {
         component={AppointmentScreen}
         options={{
           tabBarIcon: () => (
-            <MaterialCommunityIcons name="calendar-month" size={20} />
+            <MaterialCommunityIcons name="calendar-month-outline" size={25} />
           ),
         }}
       />
       <Tab.Screen
-        name="ChatPage"
+        name="Messages"
         component={ChatNavigator}
         options={{
           tabBarIcon: () => (
-            <MaterialCommunityIcons name="chat-processing-outline" size={20} />
+            <MaterialCommunityIcons name="chat-processing-outline" size={25} />
           ),
         }}
       />
@@ -41,7 +42,9 @@ function AppNavigator(props) {
         name="Profile"
         component={AccountNavigator}
         options={{
-          tabBarIcon: () => <MaterialCommunityIcons name="account" size={20} />,
+          tabBarIcon: () => (
+            <MaterialCommunityIcons name="account-circle-outline" size={25} />
+          ),
         }}
       />
     </Tab.Navigator>

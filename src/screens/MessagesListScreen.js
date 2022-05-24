@@ -82,17 +82,12 @@ const MessagesListScreen = ({ navigation }) => {
   const enterChat = (id) => {
     navigation.navigate("Chat", {
       id: id,
+      name: "Custom",
     });
   };
 
   return (
     <SafeAreaView>
-      <Button
-        title="get"
-        onPress={() => {
-          console.log(authentification?.currentUser?.uid);
-        }}
-      />
       <StatusBar style="light" />
       {userData.doctorSpeciality ? (
         <ScrollView style={styles.container}>

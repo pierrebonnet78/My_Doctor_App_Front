@@ -33,7 +33,7 @@ function HomePageScreen({ navigation }) {
       doctor: selectedValue.uid,
       doctorName: selectedValue.first_name + " " + selectedValue.last_name,
       userName: userData?.first_name + " " + userData?.last_name,
-    }).then(() => navigation.navigate("ChatPage", { screen: "ChatList" }));
+    }).then(() => navigation.navigate("Messages", { screen: "ChatList" }));
   };
 
   const fetchData = async () => {
@@ -115,7 +115,12 @@ function HomePageScreen({ navigation }) {
                   createChat();
                 }}
               />
-              <Button title="See agenda" />
+              <Button
+                title="See agenda"
+                onPress={() => {
+                  navigation.navigate("Appointment");
+                }}
+              />
             </View>
           </View>
         ) : null}

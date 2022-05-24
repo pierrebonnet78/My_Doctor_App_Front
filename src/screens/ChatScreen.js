@@ -27,14 +27,6 @@ const ChatScreen = ({ navigation, route }) => {
   const id = route.params.id;
 
   useLayoutEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => {
-        <View style={{ flex: 1 }}>
-          <Button title="back" />
-          <Text>This is a text</Text>
-        </View>;
-      },
-    });
     const q = query(
       collection(db, `chats/${id}`, "messages"),
       orderBy("createdAt", "desc")
